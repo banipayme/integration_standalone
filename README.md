@@ -145,7 +145,7 @@ ___
 
 Completar con el código de afiliado.
 
-**Tipo:** [URL]
+**Tipo:** [String]
 
 **Ejemplo:**
 
