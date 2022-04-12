@@ -153,6 +153,72 @@ Completar con el código de afiliado.
 
 ___
 
-El código generará un botón de pago en el espacio que lo haya insertado.
+# Proceso de pago
 
+### 1. Botón de pago
 
+El código generará un botón de pago en el espacio donde esté embebido el código de integración.
+
+![boton](https://github.com/banipayme/integration_standalone/blob/main/img1.png?raw=true "Boton")
+
+Al hacer click sobre **Pagar Ahora**, se abrirá un modal para que el cliente ingrese sus datos.
+
+### 2. Registro del cliente.
+
+El cliente deberá llenar los datos para la validación del KYC (Know Your Customer) de BaniPay, estos datos son importantes para validar algunos parámetros de la compra y para las reglas de control de riesgos.
+
+![boton](https://github.com/banipayme/integration_standalone/blob/main/img3.png?raw=true "Boton")
+
+**Nombre(s), Apellido(s)**, son campos tipo `String`, para el registro del cliente.
+
+**Número de Documento**, es un campo `String` con el número de identidad correspondiente a cada país.
+
+**Teléfono**, el sistema admite cualquier notación, pero en versiones posteriores correrá una validación por país, es aconsejable que el cliente ingrese el teléfono con código de país.
+
+**E-Mail, Contraseña**, el e-mail y la contraseña son importantes para el sistema BaniPay porque son la base para la creación de usuario y posterior ingreso al sistema, así como también la tokenización (mas adelante se explica la tokenización de tarjetas).
+
+### 3. Selección del medio de pago.
+
+Posteriormente el cliente podrá escoger el medio de pago de su preferencia.
+
+![boton](https://github.com/banipayme/integration_standalone/blob/main/img5.png?raw=true "Boton")
+
+La interacción del cliente con la interfaz es simplemente escoger entre los cuatro medios de pago disponibles: **QR-Simple, Tarjeta de Crédito/Débito, Tigo Money, Billetera Soli**.
+
+#### 3.1. Pago con QR-Simple
+
+Si el cliente escoje pago con QR-Simple el sistema generará un código QR con el monto y la moneda fijados.
+
+![boton](https://github.com/banipayme/integration_standalone/blob/main/img4.png?raw=true "Boton")
+
+El cliente deberá escanear el código con su aplicación de banco que tenga QR-Simple, y aprobar el pago, posteriormente el sistema direccionará a la URL de transacción satisfactoria o erronea.
+
+#### 3.2. Pago con Tarjeta de Crédito/Débito
+
+Si el cliente escoje pago con Tarjeta de Débito/Crédito, el sistema desplegará un formulario para que el cliente ingrese los datos de su tarjeta.
+
+![boton](https://github.com/banipayme/integration_standalone/blob/main/img6.png?raw=true "Boton")
+
+Los datos **Número de teléfono, Dirección, Ciudad, País, Departamento y Código Postal** son muy importantes para las reglas de riesgo que se aplican a la transacción, la localización por ejemplo sirve para detectar transacciones sospechosas en lugares muy alejados en un mismo día, el **Código** postal puede ser llenado con *00000* en el caso de Bolivia, pero para tarjetas del exterior (especialmente USA) es muy importante para las reglas.
+
+El correcto llenado de estos datos puede determinar una transacción exitosa o fallida, los mayores rechazos en transacciones suceden por datos que no coinciden.
+
+**Nro de Tarjeta, CCV, Mes/Año (Expiración)**, son datos que van cifrados directamente a la red de VISA/MasterCard, no son guardados por nuestro sistema.
+
+- **[x] ¿Quieres guardar esta tarjeta en tu cuenta BaniPay?**
+
+Esta opción permite que los datos de la tarjeta sean guardados (tokenizados) en la cuenta BaniPay del usuario, como mencionamos en el paso **2 (Registro del cliente)** cuando un cliente crea un usuario e ingresa su correo y contraseña y escoge guardar la tarjeta, la red VISA/MasterCard genera un código (Token) con los datos de la tarjeta, el sistema BaniPay guarda ese token y lo utiliza para los próximos pagos que pueda hacer el cliente simplemente escogiendo su tarjeta sin necesidad de volver a ingresar sus datos nuevamente.
+
+Cabe recalcar que por razones de seguridad, en ningún momento BaniPay guarda los datos de tarjeta del cliente, es VISA/MasterCard quien los guarda y BaniPay solo posee el token de acceso.
+
+Si el cliente escoge la opción de guardar su tarjeta, en la próxima compra tendrá este ventana.
+
+![boton](https://github.com/banipayme/integration_standalone/blob/main/img2.png?raw=true "Boton")
+
+Donde solo ingresará su correo y contraseña, escogerá la tarjeta guardada y hará el pago.
+
+### 4. Estado de la transacción.
+
+Una vez terminada la transacción el sistema devuelve un mensaje de satisfacción o error, como explicamos arriba, el sistema devuelve el URL y el portal lo captura y despliega.
+
+![boton](https://github.com/banipayme/integration_standalone/blob/main/img7.png?raw=true "Boton")
